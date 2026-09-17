@@ -71,6 +71,8 @@ The source of truth is the design project export (`kayrich-site-redesign/KayRich
 
 **Nav and footer logo.** The export inlines blank copies of the logo as `data:image/svg+xml` URIs in `Site-Nav.dc.html` and `Site-Footer.dc.html`. In this repo, both point at `assets/kayrich-logo.png` instead. That file is `main-logo-1.png`, trimmed to the mark and resized to a 640×330 palette PNG of about 25 KB. It displays at 52px tall in the nav and 72px in the footer. The blank secondary alt-logo under the footer's social icons was removed. Re-apply these two edits after copying a new export, or make the same change in the design project.
 
+**Compact mobile nav.** This is also a repo-only edit to `Site-Nav.dc.html`, so re-apply it after a new export as well. At 860px and below, the desktop links are hidden, and the header becomes a single 73px bar. The bar has the logo, a round call button and a **Menu** button. Menu opens a panel with the five coverage links, Service Area, About, Reviews, Contact, and a full-width call button. The panel closes on Escape or when the window widens past 860px. The breakpoint lives in the `<helmet><style>` block at the top of the component (`.kr-nav-desktop`, `.kr-mnav-bar`, `.kr-mnav-panel`) and in the matching `matchMedia('(min-width: 861px)')` call. Change both together. The desktop nav needs about 790px to fit on one line.
+
 ## Access note
 
 Anyone with a Vercel deployment URL can open it. `robots.txt` and `X-Robots-Tag` keep it out of search results but don't restrict access. To restrict it, turn on Vercel Deployment Protection under **Project Settings → Deployment Protection**.
