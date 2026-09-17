@@ -36,7 +36,7 @@ public/                      # everything here is deployed and publicly reachabl
   support.js                 # page runtime (loads React 18 + Babel from unpkg.com)
   image-slot.js              # <image-slot> image placeholder component
   .image-slots.state.json    # image-slot state; empty, so slots show their placeholder
-  assets/                    # logos and owner photography
+  assets/                    # logos (kayrich-logo.png = nav/footer) and owner photography
   robots.txt                 # blocks crawlers
 docs/
   routes.md                  # planned production routes, redirects, and NAP
@@ -67,7 +67,9 @@ The Auto, Home and Business coverage pages each have one `<image-slot>` with no 
 
 The source of truth is the design project export (`kayrich-site-redesign/KayRich Insurance Demo Site/`). To publish a new version, copy the `*.dc.html` files, `support.js`, `image-slot.js` and `assets/` into `public/`, then commit and push. `audit.md` and the single-file `kayrich-demo-standalone.html` export are intentionally left out. The audit is internal, and the standalone export only contains the homepage.
 
-**Keep the logo SVGs from `kayrich-site-redesign/assets/`, not from the export.** The export's `alt-logo-1.svg` and `main-logo-1.svg` (about 9 KB each) have their embedded image data stripped and render blank. That hides the logo in the quote form on every page and on the 404 page. The originals (139 KB and 90 KB) have the same dimensions and render correctly. After copying an export, run `cp ../assets/alt-logo-1.svg ../assets/main-logo-1.svg public/assets/`. Check with `for f in public/assets/*.svg; do echo "$f $(grep -o 'data:image' "$f" | wc -l)"; done`, which should print 2 for each file.
+**Keep the logo SVGs from `kayrich-site-redesign/assets/`, not from the export.** The export's `alt-logo-1.svg` and `main-logo-1.svg` (about 9 KB each) have their embedded image data stripped and render blank. That hides the logo in the quote form on every page and on the 404 page. The originals (139 KB and 90 KB) have the same dimensions and render correctly. After copying an export, run `cp ../assets/alt-logo-1.svg ../assets/main-logo-1.svg public/assets/`. Check them with `for f in public/assets/*.svg; do echo "$f $(grep -o 'data:image' "$f" | wc -l)"; done`, which should print 2 for each file.
+
+**Nav and footer logo.** The export inlines blank copies of the logo as `data:image/svg+xml` URIs in `Site-Nav.dc.html` and `Site-Footer.dc.html`. In this repo, both point at `assets/kayrich-logo.png` instead. That file is `main-logo-1.png`, trimmed to the mark and resized to a 640×330 palette PNG of about 25 KB. It displays at 52px tall in the nav and 72px in the footer. The blank secondary alt-logo under the footer's social icons was removed. Re-apply these two edits after copying a new export, or make the same change in the design project.
 
 ## Access note
 
