@@ -18,13 +18,16 @@ Static demo of the redesigned kayrichinsure.com, deployed on Vercel.
 | Install Command | *(leave empty)* |
 | Root Directory | `./` |
 
-No environment variables, no build step, no package manager. Every push to `main` redeploys.
+`vercel.json` pins `"framework": null` (the **Other** preset), `"installCommand": ""` and `"buildCommand": ""`. The deploy stays a plain static upload even if the import screen shows different defaults. There are no environment variables, no build step and no package manager. Every push to `main` redeploys.
+
+Checked with `vercel build` (CLI 48.10.5). The output is exactly the files in `public/`; nothing from the repo root is included. `/` returns a 307 to `/Home.dc.html`, and unknown paths get `public/404.html`.
 
 ## Repository layout
 
 ```
 public/                      # everything here is deployed and publicly reachable
   index.html                 # fallback redirect to Home.dc.html (for local preview / other hosts)
+  404.html                   # served by Vercel for unknown paths
   Home.dc.html               # homepage
   Auto-Insurance.dc.html     # ...one file per page, see docs/routes.md
   Site-Nav.dc.html           # shared components, fetched at runtime by support.js
@@ -52,7 +55,9 @@ The Auto, Home and Business coverage pages each have one `<image-slot>` with no 
 
 ## What `vercel.json` does
 
+- `framework: null`, `installCommand: ""`, `buildCommand: ""`: Other preset, no install, no build.
 - `outputDirectory: "public"`: only `public/` is served.
+- `cleanUrls: false`: pages keep their `.dc.html` URLs, which `support.js` needs.
 - `redirects`: `/` → `/Home.dc.html` (temporary, 307).
 - `Cache-Control: public, max-age=0, must-revalidate`: design updates show up immediately.
 - `X-Robots-Tag: noindex, nofollow` (plus `robots.txt`): keeps the demo out of search results. Canonical and `og:url` tags already point at `https://www.kayrichinsure.com`.
@@ -60,7 +65,9 @@ The Auto, Home and Business coverage pages each have one `<image-slot>` with no 
 
 ## Updating the demo
 
-The source of truth is the design project export (`kayrich-site-redesign/KayRich Insurance Demo Site/`). To publish a new version, copy the `*.dc.html` files, `support.js`, `image-slot.js` and `assets/` into `public/`, then commit and push. `audit.md` and the single-file `kayrich-demo-standalone.html` export are intentionally left out. The audit is internal, and the standalone export only contains the homepage.
+The source of truth is the design project export (`kayrich-site-redesign/KayRich Insurance Demo Site/`). To publish a new version, copy the `*.dc.html` files, `support.js`, `image-slot.js` and `assets/` into `public/`, then commit and push.
+
+**Keep the logo SVGs from `kayrich-site-redesign/assets/`, not from the export.** The export's `alt-logo-1.svg` and `main-logo-1.svg` (about 9 KB each) have their embedded image data stripped and render blank. That hides the logo in the quote form on every page and on the 404 page. The originals (139 KB and 90 KB) have the same dimensions and render correctly. After copying an export, run `cp ../assets/alt-logo-1.svg ../assets/main-logo-1.svg public/assets/`. Check with `grep -c 'data:image' public/assets/*.svg`, which should print 2 for each file. `audit.md` and the single-file `kayrich-demo-standalone.html` export are intentionally left out. The audit is internal, and the standalone export only contains the homepage.
 
 ## Access note
 
